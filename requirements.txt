@@ -1,0 +1,5 @@
+google-genai
+google-adk
+streamlit
+nest_asyncio
+python-dotenv
