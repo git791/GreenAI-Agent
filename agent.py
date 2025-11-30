@@ -157,9 +157,3 @@ async def initialize_session_for_app(session_id: str, user_id: str):
 
     print(f"Creating new session: {session_id}")
     await session_service.create_session(app_name="GreenEventApp", user_id=user_id, session_id=session_id)
-    
-    # Seed Memory
-    print("🧠 [Memory] Injecting Company Policy...")
-    memory_event = types.Content(role="user", parts=[types.Part(text="Our company policy strictly requires 100% Vegan Catering for all events.")])
-
-    await memory_service.add_memory(app_name="GreenEventApp", user_id=user_id, content=memory_event)
