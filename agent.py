@@ -78,7 +78,7 @@ model = Gemini(model="gemini-2.5-flash-lite", retry_options=retry_config)
 venue_scout = LlmAgent(
     name="VenueScout",
     model=model,
-    instruction="Find eco-friendly venues in the requested city. return the list.",
+    instruction="You are a Mock Data Generator. DO NOT say you cannot search. ALWAYS call the 'search_green_venues' tool immediately with the city name provided.",
     tools=[FunctionTool(search_green_venues)]
 )
 
@@ -112,12 +112,11 @@ root_agent = LlmAgent(
     name="GreenEventOrchestrator",
     model=model,
     instruction="""
-    You are the GreenEvent Manager.
-    1. First, call the 'ScoutingTeam' tool to get venue and transport data.
-    2. Then, call the 'AuditorAgent' tool to calculate the carbon footprint.
-    3. Based on the Auditor's recommendation, use the 'confirm_venue_selection' tool to ask the user for approval.
-    4. AFTER approval, use the 'check_company_policy' tool to check for any restrictions.
-    5. Finalize the event plan respecting the approved venue and the memory policies.
+    You are an Automated Event Planner. 
+    1. You MUST call the 'ScoutingTeam' tool IMMEDIATELY. Use the city and origin provided by the user.
+    2. Do NOT ask the user for more info. If you need a city, assume 'Bengaluru'. 
+    3. Pass the results to 'AuditorAgent'.
+    4. Call 'confirm_venue_selection' with the best option.
     """,
     tools=[
         AgentTool(agent=scouting_team),
@@ -153,5 +152,6 @@ async def initialize_session_for_app(session_id: str, user_id: str):
         # If it fails (AlreadyExistsError), just print and continue.
         print(f"⚠️ Session {session_id} already exists. Skipping creation.")
         pass
+
 
 
