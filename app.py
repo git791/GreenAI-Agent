@@ -49,7 +49,7 @@ async def run_agent(new_input=None):
             role="user",
             parts=[types.Part(
                 function_response=types.FunctionResponse(
-                    name=tool_data["tool_name"],
+                    name=tool_data["function_name"], # respond to 'adk_request_confirmation'
                     id=tool_data["tool_id"],
                     response=confirmation_payload
                 )
@@ -77,20 +77,26 @@ async def run_agent(new_input=None):
     async for event in response_stream:
         # 1. Handle Text Responses
         if event.content and event.content.parts:
-            text_chunk = event.content.parts[0].text
-            if text_chunk:
-                assistant_response_text += text_chunk
-                placeholder.markdown(assistant_response_text + "▌")
+            for part in event.content.parts:
+                if part.text:
+                    assistant_response_text += part.text
+                    placeholder.markdown(assistant_response_text + "▌")
         
-        # 2. Handle Confirmation Requests (The LRO)
-        if event.adk_request_confirmation:
-            req = event.adk_request_confirmation
-            st.session_state.pending_confirmation = {
-                "tool_name": req.tool_name,
-                "tool_id": req.tool_call_id,
-                "hint": req.hint
-            }
-            st.rerun() # Stop everything and refresh to show buttons
+        # 2. Handle Confirmation Requests (Fixed Logic)
+        if event.content and event.content.parts:
+            for part in event.content.parts:
+                # We look for the system call 'adk_request_confirmation'
+                if part.function_call and part.function_call.name == "adk_request_confirmation":
+                    call = part.function_call
+                    args = call.args or {}
+                    
+                    # Store data for the UI buttons
+                    st.session_state.pending_confirmation = {
+                        "function_name": call.name, # Correct name to respond to
+                        "tool_id": call.id,
+                        "hint": args.get("hint", "Please approve this action."),
+                    }
+                    st.rerun() # Stop everything and refresh to show buttons
 
     # Finalize display
     placeholder.markdown(assistant_response_text)
