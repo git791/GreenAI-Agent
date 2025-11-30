@@ -143,20 +143,13 @@ runner = Runner(
 )
 print("✅ Runner Ready!")
 
-# --- 5. App Integration Helpers (For Streamlit) ---
-
 async def initialize_session_for_app(session_id: str, user_id: str):
-    """Initializes the session and seeds memory for the Streamlit app."""
-    # Check if session exists (to avoid re-seeding on every reload)
+    """Initializes the session safely. Ignores error if session already exists."""
     try:
-        await session_service.get_session(session_id=session_id, user_id=user_id)
-        return
+        # Just try to create it. If it fails, we assume it exists.
+        await session_service.create_session(app_name="GreenEventApp", user_id=user_id, session_id=session_id)
+        print(f"✅ Created new session: {session_id}")
     except Exception:
-        # Session doesn't exist, so we create it.
+        # If it fails (AlreadyExistsError), just print and continue.
+        print(f"⚠️ Session {session_id} already exists. Skipping creation.")
         pass
-
-    print(f"Creating new session: {session_id}")
-    await session_service.create_session(app_name="GreenEventApp", user_id=user_id, session_id=session_id)
-
-
-
