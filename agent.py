@@ -73,7 +73,7 @@ def confirm_venue_selection(venue_name: str, total_emissions: float, tool_contex
 # --- 3. Define Agents ---
 
 retry_config = types.HttpRetryOptions(attempts=3, initial_delay=1)
-model = Gemini(model="gemini-2.0-flash-lite", retry_options=retry_config)
+model = Gemini(model="gemini-1.5-flash", retry_options=retry_config)
 
 venue_scout = LlmAgent(
     name="VenueScout",
@@ -153,3 +153,4 @@ async def initialize_session_for_app(session_id: str, user_id: str):
         # If it fails (AlreadyExistsError), just print and continue.
         print(f"⚠️ Session {session_id} already exists. Skipping creation.")
         pass
+
