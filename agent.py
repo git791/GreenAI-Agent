@@ -2,7 +2,7 @@ import asyncio
 import os
 from typing import List, Dict, Any
 
-# Google Gen AI & ADK Imports
+# Google ADK Imports
 from google.adk.agents import LlmAgent, ParallelAgent
 from google.adk.models.google_llm import Gemini
 from google.adk.runners import Runner
@@ -73,7 +73,7 @@ def confirm_venue_selection(venue_name: str, total_emissions: float, tool_contex
 # --- 3. Define Agents ---
 
 retry_config = types.HttpRetryOptions(attempts=3, initial_delay=1)
-model = Gemini(model="gemini-2.0-flash", retry_options=retry_config)
+model = Gemini(model="gemini-1.5-flash", retry_options=retry_config)
 
 venue_scout = LlmAgent(
     name="VenueScout",
@@ -157,4 +157,5 @@ async def initialize_session_for_app(session_id: str, user_id: str):
 
     print(f"Creating new session: {session_id}")
     await session_service.create_session(app_name="GreenEventApp", user_id=user_id, session_id=session_id)
+
 
