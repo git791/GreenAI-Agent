@@ -13,13 +13,6 @@ from google.adk.code_executors import BuiltInCodeExecutor
 from google.adk.apps.app import App, ResumabilityConfig
 from google.genai import types
 
-try:
-    GOOGLE_API_KEY = "AIzaSyDOPnhhf8HlD40xqrsgqhrKVvB6l-D2dYw"
-    os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
-    print("GOOGLE_API_KEY set successfully.")
-except Exception as e:
-    print(f"Error setting GOOGLE_API_KEY: {e}")
-
 # --- 1. Initialize Services ---
 # (Agents depend on tools, tools depend on services)
 session_service = InMemorySessionService()
@@ -33,7 +26,6 @@ def check_company_policy(query: str) -> str:
     Useful for checking catering or venue restrictions.
     """
     print(f"   [MemoryAgent] 🧠 Searching memory for: '{query}'...")
-    # In a real scenario, you would query 'memory_service.query(query)' here.
     return "FOUND POLICY: The company strictly requires 100% Vegan Catering for all events."
 
 def search_green_venues(city: str) -> List[Dict[str, Any]]:
@@ -169,4 +161,5 @@ async def initialize_session_for_app(session_id: str, user_id: str):
     # Seed Memory
     print("🧠 [Memory] Injecting Company Policy...")
     memory_event = types.Content(role="user", parts=[types.Part(text="Our company policy strictly requires 100% Vegan Catering for all events.")])
+
     await memory_service.add_memory(app_name="GreenEventApp", user_id=user_id, content=memory_event)
