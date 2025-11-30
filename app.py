@@ -4,7 +4,7 @@ import nest_asyncio
 from google.genai import types
 
 # Import your agent components
-from agent import runner, initialize_session_for_app
+from agent import get_runner, initialize_session_for_app
 
 # Fix asyncio loop for Streamlit
 nest_asyncio.apply()
@@ -35,6 +35,7 @@ for msg in st.session_state.messages:
 # --- Helper to Run Agent ---
 async def run_agent(new_input=None):
     """Runs the ADK runner and handles the stream."""
+    runner = get_runner()
     
     # If this is a resumption (approval), use the stored payload
     if new_input is None and "pending_confirmation" in st.session_state:
@@ -127,4 +128,5 @@ elif prompt := st.chat_input("Plan a 2-day workshop in Berlin..."):
     
     with st.chat_message("assistant"):
         asyncio.run(run_agent(prompt))
+
 
