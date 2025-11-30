@@ -98,7 +98,8 @@ def get_runner():
         1. Call 'ScoutingTeam' IMMEDIATELY using user details.
         2. Do NOT ask questions. Assume 'Bengaluru' if missing.
         3. Pass results to 'AuditorAgent'.
-        4. Call 'confirm_venue_selection' with the best option.
+        4. CRITICAL: You MUST write a message to the user saying: "I have selected [Venue Name] with [X] kg emissions."
+        5. ONLY AFTER writing that message, call 'confirm_venue_selection'.
         """,
         tools=[
             AgentTool(agent=scouting_team),
@@ -130,3 +131,4 @@ async def initialize_session_for_app(session_id: str, user_id: str):
     except Exception:
         print(f"⚠️ Session {session_id} already exists. Skipping.")
         pass
+
