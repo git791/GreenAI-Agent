@@ -14,7 +14,7 @@ st.title("🌱 GreenEvent AI Orchestrator")
 
 # --- Constants ---
 USER_ID = "streamlit_user"
-SESSION_ID = "hackathon_demo_v1"
+SESSION_ID = "hackathon_submission_final"
 
 # --- Initialization ---
 if "messages" not in st.session_state:
@@ -127,3 +127,4 @@ elif prompt := st.chat_input("Plan a 2-day workshop in Berlin..."):
     
     with st.chat_message("assistant"):
         asyncio.run(run_agent(prompt))
+
