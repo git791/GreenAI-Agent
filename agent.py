@@ -54,7 +54,7 @@ def confirm_venue_selection(venue_name: str, total_emissions: float, tool_contex
     else:
         return {"status": "rejected", "message": "Venue rejected by human."}
 
-# --- 3. The Runner Factory (Crucial Fix!) ---
+# --- 3. The Runner Factory ---
 def get_runner():
     """Creates a FRESH set of agents and runner for the current event loop."""
     
@@ -131,5 +131,6 @@ async def initialize_session_for_app(session_id: str, user_id: str):
     except Exception:
         print(f"⚠️ Session {session_id} already exists. Skipping.")
         pass
+
 
 
