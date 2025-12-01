@@ -61,7 +61,7 @@ def get_runner():
     # 1. Setup Model (Fresh connection)
     retry_config = types.HttpRetryOptions(attempts=3, initial_delay=1)
     # Using the standard 2.5 Flash as requested
-    model = Gemini(model="gemini-2.5-flash", retry_options=retry_config)
+    model = Gemini(model="gemini-2.5-flash-lite", retry_options=retry_config)
 
     # 2. Define Agents (Fresh every time)
     venue_scout = LlmAgent(
@@ -131,4 +131,5 @@ async def initialize_session_for_app(session_id: str, user_id: str):
     except Exception:
         print(f"⚠️ Session {session_id} already exists. Skipping.")
         pass
+
 
