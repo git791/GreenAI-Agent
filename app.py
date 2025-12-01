@@ -90,7 +90,7 @@ async def run_agent(new_input=None):
                     call = part.function_call
                     args = call.args or {}
                     
-                    # --- NEW FIX: Save what the agent said BEFORE the interruption ---
+                    # --- Save what the agent said BEFORE the interruption ---
                     if assistant_response_text:
                         st.session_state.messages.append({"role": "assistant", "content": assistant_response_text})
                     # -----------------------------------------------------------------
@@ -132,6 +132,7 @@ elif prompt := st.chat_input("Plan a 2-day workshop in Berlin..."):
     
     with st.chat_message("assistant"):
         asyncio.run(run_agent(prompt))
+
 
 
 
